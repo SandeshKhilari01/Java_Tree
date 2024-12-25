@@ -67,10 +67,60 @@ public class BinTreeDay4{
         Node ans = path1.get(i-1);
         return ans;
     }
+    public static Node lca2(Node root, int n1, int n2){
+        if(root == null) return root;
+        if(root.data == n1 || root.data == n2) return root;
+
+        Node leftCal = lca2(root.left, n1, n2);
+        Node rightCal = lca2(root.right, n1, n2);
+
+        if(leftCal == null) return rightCal;
+        if(rightCal == null) return leftCal;
+
+        return root;
+    }
+
+    public static int lcaDist(Node root, int n){
+        if(root == null) return -1;
+        if(root.data == n) return 0;
+
+        int leftDist = lcaDist(root.left, n);
+        int rightDist = lcaDist(root.right, n);
+
+        if(leftDist == -1 && rightDist == -1){
+            return -1;
+        } else if(leftDist == -1) {
+            return rightDist+1;
+        } else {
+            return leftDist+1;
+        }
+    }
+
+    public static int minDist(Node root, int n1, int n2){
+        Node lca = lca2(root, n1, n2);
+        int dist1 = lcaDist(lca, n1);
+        int dist2 = lcaDist(lca, n2);
+
+        return dist1+dist2;
+    }
+
+    public static int kAncestor(Node root, int n, int k){
+        if(root == null) return -1;
+        if(root.data == n) return 0;
+
+        int leftDist = kAncestor(root.left, n, k);
+        int rightDist = kAncestor(root.right, n, k);
+        if(leftDist == -1 && rightDist == -1) return -1;
+        int max = Math.max(leftDist, rightDist);
+        if(max+1 == k){
+            System.out.println(root.data);
+        }
+        return max+1;
+    }
     public static void main(String args[]){
         int nodes[] = {1, 2, 4, -1, -1, 5, -1, -1, 3, -1, 6, -1, -1};
         BuildTree tree = new BuildTree();
         Node root = tree.buildTree(nodes);
-        System.out.println(lca(root, 4, 5).data);
+        System.out.println(kAncestor(root, 6bin, 1));
     }
 }
