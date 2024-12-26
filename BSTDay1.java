@@ -56,15 +56,26 @@ public class BSTDay1{
     }
     return root;
   }
+  
+  public static void range(Node root, int x, int y){
+    if(root == null) return;
+    if(root.data >= x && root.data <= y){
+      range(root.left, x, y);
+      System.out.print(root.data+" ");
+      range(root.right, x, y);
+    }else if(root.data >= x){
+      range(root.right, x, y);
+    } else {
+      range(root.left, x, y);
+    }
+    return;
+  }
   public static void main(String args[]){
     int val[] = {5, 1, 3, 4, 2, 6};
     Node root = null;
     for(int i = 0; i<val.length; i++){
       root = insert(root, val[i]);
     }
-    inorder(root);
-    System.out.println();
-    delete(root, 9);
-    inorder(root);
+    range(root, 3, 6);
   }
 }
